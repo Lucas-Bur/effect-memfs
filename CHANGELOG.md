@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v1.0.0...effect-memfs-v1.1.0) (2026-06-26)
+
+
+### Features
+
+* add cross-validation suite against NodeFileSystem ([32d630f](https://github.com/Lucas-Bur/effect-memfs/commit/32d630f70dca2ffbe00e1d4bd25bc48c514f63ba))
+
 ## [1.0.0](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v0.2.0...effect-memfs-v1.0.0) (2026-06-26)
 
 
