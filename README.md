@@ -44,8 +44,14 @@ Effect.runPromise(
   program.pipe(
     Effect.provide(
       layer({
-        "/src/index.ts": "export const x = 1",
-        "/test/foo.test.ts": "import { x } from '../src'",
+        src: {
+          "index.ts": "export const x = 1",
+          utils: { "math.ts": "export const add = (a, b) => a + b" },
+        },
+        test: {
+          "foo.test.ts": "import { x } from '../src'",
+        },
+        assets: null, // empty directory
       }),
     ),
   ),
