@@ -2,6 +2,7 @@
 import { Effect, FileSystem, Option } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/file.txt": "content",
@@ -20,8 +21,6 @@ it.effect("chown changes file uid and gid", () =>
 it.effect("chown nonexistent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.chown("/nope.txt", 1000, 100))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.chown("/nope.txt", 1000, 100), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )

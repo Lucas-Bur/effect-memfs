@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/file.txt": "content",
@@ -40,18 +41,14 @@ it.effect("removes directory tree with recursive", () =>
 it.effect("remove non-empty directory without recursive returns BadResource", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.remove("/dir"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("BadResource")
+    yield* expectError(fs.remove("/dir"), "BadResource")
   }).pipe(Effect.provide(TestLayer)),
 )
 
 it.effect("remove nonexistent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.remove("/nope.txt"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.remove("/nope.txt"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
 

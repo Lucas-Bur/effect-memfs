@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/existing.txt": "file",
@@ -29,9 +30,7 @@ it.effect("makeDirectory on existing dir returns AlreadyExists", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
     yield* fs.makeDirectory("/existingdir")
-    const result = yield* Effect.flip(fs.makeDirectory("/existingdir"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("AlreadyExists")
+    yield* expectError(fs.makeDirectory("/existingdir"), "AlreadyExists")
   }).pipe(Effect.provide(TestLayer)),
 )
 
@@ -46,9 +45,7 @@ it.effect("makeDirectory recursive on existing dir succeeds", () =>
 it.effect("makeDirectory without recursive on missing parent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.makeDirectory("/missing/sub"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.makeDirectory("/missing/sub"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
 
@@ -66,9 +63,7 @@ it.effect("makeDirectory with recursive creates parent directories", () =>
 it.effect("makeDirectory on file returns AlreadyExists", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.makeDirectory("/existing.txt"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("AlreadyExists")
+    yield* expectError(fs.makeDirectory("/existing.txt"), "AlreadyExists")
   }).pipe(Effect.provide(TestLayer)),
 )
 

@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/existing.txt": "original",
@@ -56,9 +57,7 @@ it.effect("writeFile with flag: a appends to existing file", () =>
 it.effect("writeFile with flag: wx fails if file exists", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.writeFileString("/existing.txt", "nope", { flag: "wx" }))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("AlreadyExists")
+    yield* expectError(fs.writeFileString("/existing.txt", "nope", { flag: "wx" }), "AlreadyExists")
   }).pipe(Effect.provide(TestLayer)),
 )
 

@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/source.txt": "hello",
@@ -33,9 +34,7 @@ it.effect("rename overwrites existing destination", () =>
 it.effect("rename nonexistent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.rename("/nope.txt", "/whatever.txt"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.rename("/nope.txt", "/whatever.txt"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
 

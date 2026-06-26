@@ -2,6 +2,7 @@
 import { Effect, FileSystem, Option } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/file.txt": "Hello, World!",
@@ -111,9 +112,7 @@ it.effect("truncate through file handle", () =>
 it.effect("open nonexistent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.open("/nope.txt"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.open("/nope.txt"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
 

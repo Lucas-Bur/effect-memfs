@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/foo": "bar",
@@ -27,8 +28,6 @@ it.effect("realPath resolves a directory path", () =>
 it.effect("realPath missing path returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.realPath("/missing"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.realPath("/missing"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )

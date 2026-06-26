@@ -2,6 +2,7 @@
 import { Effect, FileSystem, Stream } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/dir/file.txt": "original",
@@ -19,9 +20,7 @@ it.effect("watch returns a Stream (no crash)", () =>
 it.effect("watch on nonexistent path fails with NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(Effect.scoped(Stream.runCollect(fs.watch("/nope"))))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(Effect.scoped(Stream.runCollect(fs.watch("/nope"))), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
 

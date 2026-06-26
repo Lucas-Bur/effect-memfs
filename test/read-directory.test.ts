@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/a.txt": "a",
@@ -78,18 +79,14 @@ it.effect("recursive from subdir returns paths relative to subdir", () =>
 it.effect("readDirectory on file returns BadResource", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.readDirectory("/a.txt"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("BadResource")
+    yield* expectError(fs.readDirectory("/a.txt"), "BadResource")
   }).pipe(Effect.provide(TestLayer)),
 )
 
 it.effect("readDirectory on nonexistent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.readDirectory("/nonexistent"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.readDirectory("/nonexistent"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
 

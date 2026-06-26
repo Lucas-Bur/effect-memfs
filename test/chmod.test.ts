@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/file.txt": "content",
@@ -19,8 +20,6 @@ it.effect("chmod changes file mode", () =>
 it.effect("chmod nonexistent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.chmod("/nope.txt", 0o644))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.chmod("/nope.txt", 0o644), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )

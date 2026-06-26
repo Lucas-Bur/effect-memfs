@@ -16,12 +16,12 @@ git push -u origin feat/describe-your-change
 
 Use [Conventional Commits](https://www.conventionalcommits.org/). Prefix determines version bump:
 
-| Prefix | Semver | Example |
-| --- | --- | --- |
-| `feat:` | minor (0.1.0 -> 0.2.0) | `feat: add watch support` |
-| `fix:` | patch (0.1.0 -> 0.1.1) | `fix: handle missing stat field` |
-| `feat!:` / `BREAKING CHANGE:` | major (0.x.x -> 1.0.0) | `feat!: drop Node 20 support` |
-| `docs:`, `chore:`, `refactor:`, `test:`, `ci:` | no bump | `docs: update readme` |
+| Prefix                                         | Semver                 | Example                          |
+| ---------------------------------------------- | ---------------------- | -------------------------------- |
+| `feat:`                                        | minor (0.1.0 -> 0.2.0) | `feat: add watch support`        |
+| `fix:`                                         | patch (0.1.0 -> 0.1.1) | `fix: handle missing stat field` |
+| `feat!:` / `BREAKING CHANGE:`                  | major (0.x.x -> 1.0.0) | `feat!: drop Node 20 support`    |
+| `docs:`, `chore:`, `refactor:`, `test:`, `ci:` | no bump                | `docs: update readme`            |
 
 ### Quality gates
 
@@ -34,12 +34,12 @@ pnpm run test:coverage
 pnpm run build
 ```
 
-| Step | Tool | Blocks merge |
-| --- | --- | --- |
-| Type check | `tsc --noEmit` | Yes |
-| Lint | `oxlint` | Yes |
-| Tests + coverage | `vitest` | Yes |
-| Build | `tsdown` | Yes |
+| Step             | Tool           | Blocks merge |
+| ---------------- | -------------- | ------------ |
+| Type check       | `tsc --noEmit` | Yes          |
+| Lint             | `oxlint`       | Yes          |
+| Tests + coverage | `vitest`       | Yes          |
+| Build            | `tsdown`       | Yes          |
 
 ### Merging
 

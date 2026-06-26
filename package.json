@@ -2,10 +2,6 @@
   "name": "@lucas-bur/effect-memfs",
   "version": "1.0.0",
   "description": "In-memory file system for Effect v4. Great for mocking, tests, simulating files and keeping files in memory. Duh.",
-  "homepage": "https://github.com/lucas-bur/effect-memfs",
-  "bugs": {
-    "url": "https://github.com/lucas-bur/effect-memfs/issues"
-  },
   "keywords": [
     "effect",
     "effect-ts",
@@ -15,6 +11,10 @@
     "mock",
     "testing"
   ],
+  "homepage": "https://github.com/lucas-bur/effect-memfs",
+  "bugs": {
+    "url": "https://github.com/lucas-bur/effect-memfs/issues"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",

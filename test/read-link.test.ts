@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/target": "link me",
@@ -19,8 +20,6 @@ it.effect("readLink resolves symlink target", () =>
 it.effect("readLink on non-symlink returns InvalidData", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.readLink("/target"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("InvalidData")
+    yield* expectError(fs.readLink("/target"), "InvalidData")
   }).pipe(Effect.provide(TestLayer)),
 )

@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/hello.txt": "Hello, World!",
@@ -36,27 +37,21 @@ it.effect("readFile returns Uint8Array", () =>
 it.effect("readFile on directory returns BadResource", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.readFile("/nested"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("BadResource")
+    yield* expectError(fs.readFile("/nested"), "BadResource")
   }).pipe(Effect.provide(TestLayer)),
 )
 
 it.effect("readFile on nonexistent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.readFile("/does-not-exist.txt"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.readFile("/does-not-exist.txt"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
 
 it.effect("readFileString on nonexistent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.readFileString("/missing.txt"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.readFileString("/missing.txt"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
 

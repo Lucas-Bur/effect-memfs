@@ -2,6 +2,7 @@
 import { Effect, FileSystem, Option } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/file.txt": "content",
@@ -24,8 +25,6 @@ it.effect("utimes updates atime and mtime", () =>
 it.effect("utimes nonexistent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.utimes("/nope.txt", new Date(), new Date()))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.utimes("/nope.txt", new Date(), new Date()), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )

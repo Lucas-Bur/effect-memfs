@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/hello.txt": "Hello",
@@ -60,18 +61,14 @@ it.effect("access on directory succeeds", () =>
 it.effect("access nonexistent file returns PlatformError(NotFound)", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.access("/nope.txt"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.access("/nope.txt"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
 
 it.effect("access nonexistent file with options also returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.access("/nope.txt", { readable: true }))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.access("/nope.txt", { readable: true }), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
 

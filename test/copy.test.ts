@@ -2,6 +2,7 @@
 import { Effect, FileSystem, Option } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/source/file.txt": "content",
@@ -31,9 +32,7 @@ it.effect(
   () =>
     Effect.gen(function* () {
       const fs = yield* FileSystem.FileSystem
-      const result = yield* Effect.flip(fs.copy("/source/file.txt", "/dest/file.txt"))
-      expect(result._tag).toBe("PlatformError")
-      expect(result.reason._tag).toBe("AlreadyExists")
+      yield* expectError(fs.copy("/source/file.txt", "/dest/file.txt"), "AlreadyExists")
     }).pipe(Effect.provide(TestLayer)),
 )
 
@@ -49,11 +48,10 @@ it.effect("copy with overwrite=true replaces destination", () =>
 it.effect("copy to existing destination with overwrite=false returns AlreadyExists", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(
+    yield* expectError(
       fs.copy("/source/file.txt", "/dest/file.txt", { overwrite: false }),
+      "AlreadyExists",
     )
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("AlreadyExists")
   }).pipe(Effect.provide(TestLayer)),
 )
 
@@ -85,8 +83,6 @@ it.effect("copy with preserveTimestamps=false updates mtime", () =>
 it.effect("copy nonexistent source returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.copy("/nope.txt", "/any.txt"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.copy("/nope.txt", "/any.txt"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )

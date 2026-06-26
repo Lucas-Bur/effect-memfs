@@ -2,6 +2,7 @@
 import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
+import { expectError } from "./helpers.js"
 
 const TestLayer = layer({
   "/file.txt": "Hello, World!",
@@ -48,8 +49,6 @@ it.effect("truncate to larger size pads with null bytes", () =>
 it.effect("truncate nonexistent returns NotFound", () =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
-    const result = yield* Effect.flip(fs.truncate("/nope.txt"))
-    expect(result._tag).toBe("PlatformError")
-    expect(result.reason._tag).toBe("NotFound")
+    yield* expectError(fs.truncate("/nope.txt"), "NotFound")
   }).pipe(Effect.provide(TestLayer)),
 )
