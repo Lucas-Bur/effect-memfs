@@ -3,7 +3,7 @@ import { Effect, FileSystem } from "effect"
 
 import { layer } from "../src/index.js"
 
-const TestLayer = layer
+const TestLayer = layer()
 
 it.effect("makeTempDirectory creates a temporary directory", () =>
   Effect.gen(function* () {

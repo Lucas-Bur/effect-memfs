@@ -1,13 +1,13 @@
 ﻿import { it } from "@effect/vitest"
 import { Effect, FileSystem, Option } from "effect"
 
-import { layer, layerWith } from "../src/index.js"
+import { layer } from "../src/index.js"
 
-const TestLayer = layerWith({
+const TestLayer = layer({
   "/file.txt": "Hello, World!",
 })
 
-const TestLayerEmpty = layer
+const TestLayerEmpty = layer()
 
 it.effect("opens a file for reading", () =>
   Effect.gen(function* () {

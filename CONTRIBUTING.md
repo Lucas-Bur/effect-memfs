@@ -63,6 +63,6 @@ No manual version bumping. No manual changelog.
 src/
   helpers/        # Internal utilities (error mapping, effect wrappers, volume)
   operations/     # One file per filesystem operation
-  index.ts        # Public API (layer, layerWith, FileTree)
+  index.ts        # Public API (layer, FileTree)
 test/             # Tests mirror the src structure
 ```

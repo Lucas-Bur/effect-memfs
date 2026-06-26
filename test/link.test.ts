@@ -1,9 +1,9 @@
 ﻿import { expect, it } from "@effect/vitest"
 import { Effect, FileSystem } from "effect"
 
-import { layerWith } from "../src/index.js"
+import { layer } from "../src/index.js"
 
-const TestLayer = layerWith({
+const TestLayer = layer({
   "/source.txt": "link content",
 })
 

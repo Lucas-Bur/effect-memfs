@@ -1,9 +1,9 @@
-import { expect, it } from "@effect/vitest"
+﻿import { expect, it } from "@effect/vitest"
 import { Effect, FileSystem, Stream } from "effect"
 
-import { layerWith } from "../src/index.js"
+import { layer } from "../src/index.js"
 
-const TestLayer = layerWith({
+const TestLayer = layer({
   "/dir/file.txt": "original",
   "/other.txt": "data",
 })

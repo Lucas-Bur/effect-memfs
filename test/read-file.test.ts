@@ -1,9 +1,9 @@
 ﻿import { it } from "@effect/vitest"
 import { Effect, FileSystem } from "effect"
 
-import { layerWith } from "../src/index.js"
+import { layer } from "../src/index.js"
 
-const TestLayer = layerWith({
+const TestLayer = layer({
   "/hello.txt": "Hello, World!",
   "/nested/file.md": "# Markdown",
 })
@@ -65,5 +65,5 @@ it.effect("reads empty file", () =>
     const fs = yield* FileSystem.FileSystem
     const content = yield* fs.readFileString("/empty.txt")
     expect(content).toBe("")
-  }).pipe(Effect.provide(layerWith({ "/empty.txt": "" }))),
+  }).pipe(Effect.provide(layer({ "/empty.txt": "" }))),
 )

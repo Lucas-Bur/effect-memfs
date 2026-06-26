@@ -25,7 +25,7 @@ const program = Effect.gen(function* () {
   return yield* fs.readFileString("hello.txt")
 })
 
-Effect.runPromise(program.pipe(Effect.provide(MemoryFileSystem.layer)))
+Effect.runPromise(program.pipe(Effect.provide(MemoryFileSystem.layer())))
 // => "world"
 ```
 
@@ -33,7 +33,7 @@ Pre-populate files:
 
 ```ts
 import { Effect, FileSystem } from "effect"
-import { layerWith } from "@lucas-bur/effect-memfs"
+import { layer } from "@lucas-bur/effect-memfs"
 
 const program = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem
@@ -43,7 +43,7 @@ const program = Effect.gen(function* () {
 Effect.runPromise(
   program.pipe(
     Effect.provide(
-      layerWith({
+      layer({
         "/src/index.ts": "export const x = 1",
         "/test/foo.test.ts": "import { x } from '../src'",
       }),

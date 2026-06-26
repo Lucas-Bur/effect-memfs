@@ -57,9 +57,5 @@ const makeFileSystem = (initialFiles: FileTree = {}): Effect.Effect<FileSystem.F
     })
   })
 
-export const layer: Layer.Layer<FileSystem.FileSystem> = Layer.effect(FileSystem.FileSystem)(
-  makeFileSystem(),
-)
-
-export const layerWith = (initialFiles: FileTree = {}): Layer.Layer<FileSystem.FileSystem> =>
+export const layer = (initialFiles: FileTree = {}): Layer.Layer<FileSystem.FileSystem> =>
   Layer.effect(FileSystem.FileSystem)(makeFileSystem(initialFiles))
