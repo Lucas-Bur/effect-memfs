@@ -1,6 +1,6 @@
 {
   "name": "@lucas-bur/effect-memfs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "In-memory file system for Effect v4. Great for mocking, tests, simulating files and keeping files in memory. Duh.",
   "keywords": [
     "effect",
