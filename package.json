@@ -1,0 +1,57 @@
+{
+  "name": "@lucas-bur/effect-memfs",
+  "version": "0.1.0",
+  "description": "In-memory file system for Effect v4. Great for mocking, tests, simulating files and keeping files in memory. Duh.",
+  "keywords": [
+    "effect",
+    "effect-ts",
+    "filesystem",
+    "in-memory",
+    "memfs",
+    "mock",
+    "testing"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucas-bur/effect-memfs"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "build": "tsdown"
+  },
+  "dependencies": {
+    "memfs": "^4.57.8"
+  },
+  "devDependencies": {
+    "@effect/vitest": "^4.0.0-beta.90",
+    "oxfmt": "^0.56.0",
+    "oxlint": "^1.71.0",
+    "tsdown": "^0.22.3",
+    "typescript": "^5.8.0",
+    "vitest": "^3.1.0"
+  },
+  "peerDependencies": {
+    "effect": "^4.0.0-beta.90"
+  }
+}

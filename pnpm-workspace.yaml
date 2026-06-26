@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: true
+  msgpackr-extract: true
+minimumReleaseAgeExclude:
+  - "@effect/vitest@4.0.0-beta.90"
+  - effect@4.0.0-beta.90

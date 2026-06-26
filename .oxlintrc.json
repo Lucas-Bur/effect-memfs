@@ -1,0 +1,10 @@
+{
+  "plugins": ["typescript", "import", "vitest"],
+  "rules": {
+    "no-unused-vars": "error",
+    "no-console": "warn",
+    "no-debugger": "error",
+    "typescript/consistent-type-imports": "error",
+    "vitest/no-standalone-expect": "off"
+  }
+}
