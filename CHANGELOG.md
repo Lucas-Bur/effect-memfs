@@ -1,0 +1,14 @@
+# Changelog
+
+## [0.2.0](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v0.1.0...effect-memfs-v0.2.0) (2026-06-26)
+
+
+### Features
+
+* initial implementation ([d627783](https://github.com/Lucas-Bur/effect-memfs/commit/d627783f249153030ed92752cd626ed8ecfca299))
+
+
+### Bug Fixes
+
+* add pnpm version to action-setup ([820cf22](https://github.com/Lucas-Bur/effect-memfs/commit/820cf2282bec39778e5f7ce82cefd2ae3a4636c8))
+* added tooling ([79a8e26](https://github.com/Lucas-Bur/effect-memfs/commit/79a8e269cbcd7a5062a345065f238e6893255c6c))
