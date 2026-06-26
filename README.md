@@ -1,5 +1,7 @@
 # @lucas-bur/effect-memfs
 
+[![codecov](https://codecov.io/gh/lucas-bur/effect-memfs/branch/main/graph/badge.svg)](https://codecov.io/gh/lucas-bur/effect-memfs)
+
 Platform-agnostic in-memory file system for [Effect](https://effect.website) v4. Everything is kept in RAM – no disk, no native bindings. Works in Node, browsers, edge runtimes, anywhere.
 
 Ideal for testing, mocking, and scenarios where you need a filesystem but don't want to touch the real one. Exposes the standard `FileSystem` service so your Effect code doesn't know the difference.

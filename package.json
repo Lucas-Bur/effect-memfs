@@ -2,6 +2,10 @@
   "name": "@lucas-bur/effect-memfs",
   "version": "0.1.0",
   "description": "In-memory file system for Effect v4. Great for mocking, tests, simulating files and keeping files in memory. Duh.",
+  "homepage": "https://github.com/lucas-bur/effect-memfs",
+  "bugs": {
+    "url": "https://github.com/lucas-bur/effect-memfs/issues"
+  },
   "keywords": [
     "effect",
     "effect-ts",
@@ -30,21 +34,27 @@
       "require": "./dist/index.cjs"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "vitest",
     "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "build": "tsdown"
+    "build": "tsdown",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "memfs": "^4.57.8"
   },
   "devDependencies": {
     "@effect/vitest": "^4.0.0-beta.90",
+    "@vitest/coverage-v8": "^3.2.6",
     "oxfmt": "^0.56.0",
     "oxlint": "^1.71.0",
     "tsdown": "^0.22.3",
