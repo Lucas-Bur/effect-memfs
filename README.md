@@ -1,5 +1,6 @@
 # @lucas-bur/effect-memfs
 
+[![npm](https://img.shields.io/npm/v/@lucas-bur/effect-memfs)](https://www.npmjs.com/package/@lucas-bur/effect-memfs)
 [![codecov](https://codecov.io/gh/lucas-bur/effect-memfs/branch/main/graph/badge.svg)](https://codecov.io/gh/lucas-bur/effect-memfs)
 
 Platform-agnostic in-memory file system for [Effect](https://effect.website) v4. Everything is kept in RAM – no disk, no native bindings. Works in Node, browsers, edge runtimes, anywhere.
