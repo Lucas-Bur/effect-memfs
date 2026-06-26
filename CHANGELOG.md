@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v1.1.0...effect-memfs-v1.1.1) (2026-06-26)
+
+
+### Bug Fixes
+
+* add --no-git-checks to publish workflow, show nested JSON in README ([ed77fc6](https://github.com/Lucas-Bur/effect-memfs/commit/ed77fc6eb57fe00d8a8d7d7a36dd025b6520b965))
+
 ## [1.1.0](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v1.0.0...effect-memfs-v1.1.0) (2026-06-26)
 
 
