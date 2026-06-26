@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v0.2.0...effect-memfs-v1.0.0) (2026-06-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* merge layerWith into layer, layer now takes optional initialFiles
+
+### Features
+
+* merge layerWith into layer, layer now takes optional initialFiles ([0948b22](https://github.com/Lucas-Bur/effect-memfs/commit/0948b22c50b3aaf7a31aa4c875942e474c6f3096))
+
 ## [0.2.0](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v0.1.0...effect-memfs-v0.2.0) (2026-06-26)
 
 
