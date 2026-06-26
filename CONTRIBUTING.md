@@ -65,4 +65,28 @@ src/
   operations/     # One file per filesystem operation
   index.ts        # Public API (layer, FileTree)
 test/             # Tests mirror the src structure
+  helpers.ts      # Shared test utilities (expectError)
+  file-system-suite.ts  # Cross-validation suite (Memory vs Node)
+```
+
+## Testing conventions
+
+### Cross-validation suite
+
+`test/file-system-suite.ts` runs the same tests against **both** `MemoryFileSystem` and `NodeFileSystem` to verify 1:1 behavioral parity.
+
+When a test passes on one backend but fails on the other, that's a bug — not a platform quirk. Fix the discrepancy, then add a dedicated regression test to the suite covering that exact scenario so it never regresses.
+
+```ts
+// At the bottom of file-system-suite.ts:
+fileSystemSuite(NodeFileSystem.layer, "NodeFileSystem")
+fileSystemSuite(layer(), "MemoryFileSystem")
+```
+
+### Error assertions
+
+Use `expectError(effect, "ErrorTag")` from `test/helpers.ts` for PlatformError checks. It uses `Effect.exit` + `Exit.isFailure` + `Cause.findErrorOption` under the hood — no fragile `_tag` string comparison.
+
+```ts
+yield * expectError(fs.stat("/missing"), "NotFound")
 ```
