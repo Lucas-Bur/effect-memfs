@@ -83,6 +83,42 @@ const fileSystemSuite = (layer: Layer.Layer<FileSystem.FileSystem>, name: string
       }).pipe(Effect.provide(layer)),
     )
 
+    it.effect("readDirectory recursive returns relative paths (matches Node)", () =>
+      Effect.gen(function* () {
+        const fs = yield* FileSystem.FileSystem
+        const tmp = yield* fs.makeTempDirectoryScoped()
+        yield* fs.writeFileString(`${tmp}/a.txt`, "a")
+        yield* fs.makeDirectory(`${tmp}/sub`)
+        yield* fs.writeFileString(`${tmp}/sub/c.txt`, "c")
+        yield* fs.makeDirectory(`${tmp}/sub/deep`)
+        yield* fs.writeFileString(`${tmp}/sub/deep/d.txt`, "d")
+        yield* fs.makeDirectory(`${tmp}/empty`)
+        // 1:1 with node:fs — relative paths, includes directories, depth-first order.
+        const normalize = (e: string) => e.replace(/\\/g, "/")
+        const baseline = (yield* fs.readDirectory(tmp, { recursive: true })).map(normalize)
+        // Same call, with trailing slash — must produce the same output.
+        const withSlash = (yield* fs.readDirectory(`${tmp}/`, { recursive: true })).map(normalize)
+        expect(baseline).toStrictEqual(withSlash)
+        // No entry should start with `/` (these are relative paths).
+        for (const e of baseline) {
+          expect(e.startsWith("/")).toBe(false)
+        }
+        expect(baseline).toContain("a.txt")
+        expect(baseline).toContain("sub")
+        expect(baseline).toContain("sub/c.txt")
+        expect(baseline).toContain("sub/deep")
+        expect(baseline).toContain("sub/deep/d.txt")
+        // Recursive from a subdir is relative to that subdir.
+        const fromSub = (yield* fs.readDirectory(`${tmp}/sub`, { recursive: true })).map(normalize)
+        expect(fromSub).toContain("c.txt")
+        expect(fromSub).toContain("deep")
+        expect(fromSub).toContain("deep/d.txt")
+        expect(fromSub).not.toContain("sub/c.txt")
+        // Empty directory yields an empty list (not the dir name itself).
+        expect(yield* fs.readDirectory(`${tmp}/empty`, { recursive: true })).toStrictEqual([])
+      }).pipe(Effect.provide(layer)),
+    )
+
     it.effect("remove deletes a file", () =>
       Effect.gen(function* () {
         const fs = yield* FileSystem.FileSystem

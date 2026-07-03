@@ -58,6 +58,37 @@ Effect.runPromise(
 )
 ```
 
+Snapshot a real directory tree into a fresh in-memory layer. Files, empty
+directories, symlinks, file mode, owner, and access/modification times are
+all replicated. The caller provides the `FileSystem.FileSystem` service used
+for the walk, so the source can live on Node, Bun, Deno, or any other
+Effect-TS `FileSystem` backend.
+
+```ts
+import { NodeFileSystem } from "@effect/platform-node-shared"
+import { Effect, FileSystem } from "effect"
+import { layerFromPath } from "@lucas-bur/effect-memfs"
+
+const program = Effect.gen(function* () {
+  const fs = yield* FileSystem.FileSystem
+  return yield* fs.readFileString("/data/fixtures/test.json")
+}).pipe(
+  Effect.provide(layerFromPath("/data/fixtures")),
+  Effect.provide(NodeFileSystem.layer),
+)
+```
+
+The source path is mounted at the same location in the in-memory
+filesystem by default; pass `{ mountAt: "/some/other/path" }` to remap.
+
+## Roadmap
+
+- [ ] **1:1 parity with Node's filesystem** — `@lucas-bur/effect-memfs` must be a
+  drop-in replacement for `NodeFileSystem`: identical behavior, error tags, and
+  edge cases. Enforced by `test/file-system-suite.test.ts`, which runs the same
+  suite against both backends. Any divergence is a bug to fix, not a quirk to
+  document. Pinned via the `TODO(1:1-parity)` marker in `src/index.ts`.
+
 ## License
 
 MIT
