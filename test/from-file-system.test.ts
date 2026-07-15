@@ -92,7 +92,9 @@ it.effect("replicates into read-only source directories (e.g. .git/objects)", ()
     yield* fs.makeDirectory(`${tmp}/ro`)
     yield* fs.writeFileString(`${tmp}/ro/loose-object`, "blob")
     yield* fs.chmod(`${tmp}/ro`, 0o444)
-    const vol = yield* makeVolFromFileSystem(fs, tmp)
+    const vol = yield* makeVolFromFileSystem(fs, tmp).pipe(
+      Effect.ensuring(Effect.ignore(fs.chmod(`${tmp}/ro`, 0o755))),
+    )
     expect(vol.readFileSync(`${tmp}/ro/loose-object`, "utf8")).toBe("blob")
   }).pipe(provideNode),
 )
