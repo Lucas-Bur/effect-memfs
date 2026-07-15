@@ -2,6 +2,7 @@ import type { FileSystem } from "effect"
 import type { Volume } from "memfs"
 
 import { fromPromise } from "../helpers/promise.js"
+import type { ResolvePath } from "../helpers/volume.js"
 
 // NOTE: Unlike NodeFileSystem, memfs has no AbortSignal support,
 // so we skip the `signal` option that the reference passes to fs.readFile.
@@ -9,6 +10,10 @@ import { fromPromise } from "../helpers/promise.js"
 // FileSystem.make() reads the result via TextDecoder, so the cast should be safe.
 
 export const readFile =
-  (vol: Volume): FileSystem.FileSystem["readFile"] =>
+  (vol: Volume, resolvePath: ResolvePath): FileSystem.FileSystem["readFile"] =>
   (path) =>
-    fromPromise(() => vol.promises.readFile(path) as Promise<Uint8Array>, "readFile", path)
+    fromPromise(
+      () => vol.promises.readFile(resolvePath(path)) as Promise<Uint8Array>,
+      "readFile",
+      path,
+    )

@@ -2,6 +2,7 @@ import { Effect, FileSystem, Option } from "effect"
 import type { Volume } from "memfs"
 
 import { fromPromise } from "../helpers/promise.js"
+import type { ResolvePath } from "../helpers/volume.js"
 
 type MemfsStats = Awaited<ReturnType<Volume["promises"]["stat"]>>
 
@@ -39,6 +40,8 @@ const makeInfo = (stat: MemfsStats): FileSystem.File.Info => ({
 export { makeInfo }
 
 export const stat =
-  (vol: Volume): FileSystem.FileSystem["stat"] =>
+  (vol: Volume, resolvePath: ResolvePath): FileSystem.FileSystem["stat"] =>
   (path) =>
-    fromPromise(() => vol.promises.stat(path), "stat", path).pipe(Effect.map((s) => makeInfo(s)))
+    fromPromise(() => vol.promises.stat(resolvePath(path)), "stat", path).pipe(
+      Effect.map((s) => makeInfo(s)),
+    )

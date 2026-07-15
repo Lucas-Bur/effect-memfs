@@ -2,6 +2,7 @@ import { Cause, Effect, type FileSystem, PlatformError, Queue, Stream } from "ef
 import type { Volume } from "memfs"
 
 import { fromPromise } from "../helpers/promise.js"
+import type { ResolvePath } from "../helpers/volume.js"
 
 // QUIRK (?): memfs fires the watcher callback twice per writeFileSync
 // (two "change" events for a single write). This is a bug in the
@@ -60,9 +61,11 @@ const watchNode = (vol: Volume) => (path: string) =>
   )
 
 export const watch =
-  (vol: Volume): FileSystem.FileSystem["watch"] =>
-  (path) =>
-    fromPromise(() => vol.promises.stat(path), "stat", path).pipe(
-      Effect.map(() => watchNode(vol)(path)),
+  (vol: Volume, resolvePath: ResolvePath): FileSystem.FileSystem["watch"] =>
+  (path) => {
+    const resolvedPath = resolvePath(path)
+    return fromPromise(() => vol.promises.stat(resolvedPath), "stat", path).pipe(
+      Effect.map(() => watchNode(vol)(resolvedPath)),
       Stream.unwrap,
     )
+  }
