@@ -1,5 +1,5 @@
 import { NodeFileSystem } from "@effect/platform-node-shared"
-import { it } from "@effect/vitest"
+import { expect, it } from "@effect/vitest"
 import { Effect, FileSystem } from "effect"
 
 import { makeVolFromFileSystem } from "../src/helpers/volume.js"

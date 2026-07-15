@@ -1,5 +1,5 @@
+import { describe, expect, it } from "@effect/vitest"
 import type { PlatformError } from "effect"
-import { describe, expect, it } from "vitest"
 
 import { toPlatformError } from "../src/helpers/error.js"
 
