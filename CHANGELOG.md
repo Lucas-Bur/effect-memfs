@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v1.2.0...effect-memfs-v1.2.1) (2026-07-15)
+
+
+### Bug Fixes
+
+* resolve relative paths from virtual cwd ([d3b53fa](https://github.com/Lucas-Bur/effect-memfs/commit/d3b53fa95b12f193692a2a874a896f5f6d0a73b2))
+
 ## [1.2.0](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v1.1.1...effect-memfs-v1.2.0) (2026-07-15)
 
 
