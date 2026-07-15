@@ -1,7 +1,7 @@
 import { NodeFileSystem, NodeRuntime } from "@effect/platform-node-shared"
 import { Console, Effect, FileSystem } from "effect"
 
-import { layerFromPath } from "../dist/index.mjs"
+import { layerFromPath } from "../src/index.js"
 
 // it.effect("scratch: write + read roundtrip", () =>
 //   Effect.gen(function* () {
