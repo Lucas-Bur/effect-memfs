@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v1.1.1...effect-memfs-v1.2.0) (2026-07-15)
+
+
+### Features
+
+* derive in-memory layer from another FileSystem ([#5](https://github.com/Lucas-Bur/effect-memfs/issues/5)) ([f5acef5](https://github.com/Lucas-Bur/effect-memfs/commit/f5acef57da9bc73e3be6a192b479401db01158cf))
+
 ## [1.1.1](https://github.com/Lucas-Bur/effect-memfs/compare/effect-memfs-v1.1.0...effect-memfs-v1.1.1) (2026-06-26)
 
 
