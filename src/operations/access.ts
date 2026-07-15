@@ -3,6 +3,7 @@ import type { Volume } from "memfs"
 import { fs } from "memfs"
 
 import { fromPromise } from "../helpers/promise.js"
+import type { ResolvePath } from "../helpers/volume.js"
 
 const { F_OK, R_OK, W_OK } = fs.constants
 
@@ -17,6 +18,6 @@ const accessMode = (
 }
 
 export const access =
-  (vol: Volume): FileSystem.FileSystem["access"] =>
+  (vol: Volume, resolvePath: ResolvePath): FileSystem.FileSystem["access"] =>
   (path, options) =>
-    fromPromise(() => vol.promises.access(path, accessMode(options)), "access", path)
+    fromPromise(() => vol.promises.access(resolvePath(path), accessMode(options)), "access", path)

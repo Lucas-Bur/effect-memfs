@@ -7,8 +7,14 @@ export interface FileTree {
   [key: string]: string | null | FileTree
 }
 
-export const makeVol = (initialFiles: FileTree = {}): Volume =>
-  Volume.fromNestedJSON(initialFiles, "/")
+export interface VolumeOptions {
+  readonly cwd?: string
+}
+
+export type ResolvePath = (path: string) => string
+
+export const makeVol = (initialFiles: FileTree = {}, options: VolumeOptions = {}): Volume =>
+  Volume.fromNestedJSON(initialFiles, normalizeCwd(options.cwd ?? "/"))
 
 const copyMode = (vol: Volume, dst: string, info: FileSystem.File.Info, isLink: boolean): void => {
   const mode = info.mode & 0o777
@@ -48,6 +54,21 @@ const copyTimestamps = (
 
 const toUnix = (p: string): string => p.replace(/\\/g, "/")
 
+const normalizeCwd = (cwd: string): string => {
+  const normalized = toUnix(cwd)
+  if (normalized.startsWith("/") || /^[A-Za-z]:/.test(normalized)) return normalized
+  return "/" + normalized
+}
+
+export const makeResolvePath = (cwd = "/"): ResolvePath => {
+  const base = normalizeCwd(cwd)
+  return (path) => {
+    const normalized = toUnix(path)
+    if (normalized.startsWith("/") || /^[A-Za-z]:/.test(normalized)) return normalized
+    return base.endsWith("/") ? base + normalized : base + "/" + normalized
+  }
+}
+
 // memfs resolves relative paths against `process.cwd()`, which would land
 // the in-memory tree under the OS working directory. Force a leading `/`
 // so a bare relative path (e.g. `mountAt: "app"`) is treated as absolute
@@ -56,10 +77,7 @@ const toUnix = (p: string): string => p.replace(/\\/g, "/")
 // because the extra `/` would corrupt the drive-letter form on Windows
 // (`path.resolve("/C:/foo")` becomes `E:\C:\foo`).
 const toVolumePath = (p: string): string => {
-  const normalized = toUnix(p)
-  if (normalized.startsWith("/")) return normalized
-  if (/^[A-Za-z]:/.test(normalized)) return normalized
-  return "/" + normalized
+  return normalizeCwd(p)
 }
 
 const populate = (

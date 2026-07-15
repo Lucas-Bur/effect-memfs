@@ -1,7 +1,13 @@
 import { Effect, FileSystem, Layer, type PlatformError } from "effect"
 import type { Volume } from "memfs"
 
-import { makeVol, makeVolFromFileSystem, type FileTree } from "./helpers/volume.js"
+import {
+  makeResolvePath,
+  makeVol,
+  makeVolFromFileSystem,
+  type FileTree,
+  type VolumeOptions,
+} from "./helpers/volume.js"
 import { access } from "./operations/access.js"
 import { chmod } from "./operations/chmod.js"
 import { chown } from "./operations/chown.js"
@@ -25,6 +31,7 @@ import { utimes } from "./operations/utimes.js"
 import { watch } from "./operations/watch.js"
 import { writeFile } from "./operations/write-file.js"
 
+export type LayerOptions = VolumeOptions
 export { type FileTree }
 
 // TODO(1:1-parity): memfs must be 1:1 interchangeable with NodeFileSystem — same
@@ -34,36 +41,44 @@ export { type FileTree }
 // regression test that pins the corrected behavior. Tracked at the project level
 // because every operation in this module depends on it.
 
-const makeFileSystem = (vol: Volume): FileSystem.FileSystem =>
-  FileSystem.make({
-    access: access(vol),
-    chmod: chmod(vol),
-    chown: chown(vol),
-    copy: copy(vol),
-    copyFile: copyFile(vol),
-    link: link(vol),
-    makeDirectory: makeDirectory(vol),
-    makeTempDirectory: makeTempDirectory(vol),
-    makeTempDirectoryScoped: makeTempDirectoryScoped(vol),
-    makeTempFile: makeTempFile(vol),
-    makeTempFileScoped: makeTempFileScoped(vol),
-    open: open(vol),
-    readDirectory: readDirectory(vol),
-    readFile: readFile(vol),
-    readLink: readLink(vol),
-    realPath: realPath(vol),
-    remove: remove(vol),
-    rename: rename(vol),
-    stat: stat(vol),
-    symlink: symlink(vol),
-    truncate: truncate(vol),
-    utimes: utimes(vol),
-    watch: watch(vol),
-    writeFile: writeFile(vol),
+const makeFileSystem = (vol: Volume, cwd = "/"): FileSystem.FileSystem => {
+  const resolvePath = makeResolvePath(cwd)
+  return FileSystem.make({
+    access: access(vol, resolvePath),
+    chmod: chmod(vol, resolvePath),
+    chown: chown(vol, resolvePath),
+    copy: copy(vol, resolvePath),
+    copyFile: copyFile(vol, resolvePath),
+    link: link(vol, resolvePath),
+    makeDirectory: makeDirectory(vol, resolvePath),
+    makeTempDirectory: makeTempDirectory(vol, resolvePath),
+    makeTempDirectoryScoped: makeTempDirectoryScoped(vol, resolvePath),
+    makeTempFile: makeTempFile(vol, resolvePath),
+    makeTempFileScoped: makeTempFileScoped(vol, resolvePath),
+    open: open(vol, resolvePath),
+    readDirectory: readDirectory(vol, resolvePath),
+    readFile: readFile(vol, resolvePath),
+    readLink: readLink(vol, resolvePath),
+    realPath: realPath(vol, resolvePath),
+    remove: remove(vol, resolvePath),
+    rename: rename(vol, resolvePath),
+    stat: stat(vol, resolvePath),
+    symlink: symlink(vol, resolvePath),
+    truncate: truncate(vol, resolvePath),
+    utimes: utimes(vol, resolvePath),
+    watch: watch(vol, resolvePath),
+    writeFile: writeFile(vol, resolvePath),
   })
+}
 
-export const layer = (initialFiles: FileTree = {}): Layer.Layer<FileSystem.FileSystem> =>
-  Layer.sync(FileSystem.FileSystem, () => makeFileSystem(makeVol(initialFiles)))
+export const layer = (
+  initialFiles: FileTree = {},
+  options: LayerOptions = {},
+): Layer.Layer<FileSystem.FileSystem> =>
+  Layer.sync(FileSystem.FileSystem, () => {
+    const cwd = options.cwd ?? "/"
+    return makeFileSystem(makeVol(initialFiles, { cwd }), cwd)
+  })
 
 /**
  * Build a `FileSystem` layer pre-populated from a real directory.
@@ -77,7 +92,7 @@ export const layer = (initialFiles: FileTree = {}): Layer.Layer<FileSystem.FileS
  * remap it.
  *
  * @example
- *   ```ts
+ *   ;```ts
  *   import { NodeFileSystem } from "@effect/platform-node-shared"
  *   import { Effect, FileSystem } from "effect"
  *   import { layerFromPath } from "@lucas-bur/effect-memfs"
